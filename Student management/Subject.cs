@@ -13,5 +13,4 @@ namespace Student_management
             telugu, hindi, english, maths, science, social
         }
     }
-   
 }
