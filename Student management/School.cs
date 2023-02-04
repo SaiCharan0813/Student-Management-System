@@ -13,6 +13,5 @@ namespace Student_management
         public string schoolName;
         public static List<Student> students = new List<Student>();
         
-
     }
 }

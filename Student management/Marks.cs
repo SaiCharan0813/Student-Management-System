@@ -11,5 +11,6 @@ namespace Student_management
     {
         public StudentSubjects.Subjects SubjectName { get; set; }
         public float Score { get; set; }
+
     }
 }

@@ -374,8 +374,6 @@ namespace Studentmanagement
                 Console.WriteLine("Student with Rollnumber: " + student.StudentRollnumber + " \nName:" + student.Name);
             }
         }
-
-
     }
 
 }
