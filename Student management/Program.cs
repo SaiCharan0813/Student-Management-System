@@ -9,46 +9,11 @@ namespace Schoolmanagement
     {
         public static void Main(string[] args)
         {
-            School school = new School();
-
-
-            string schoolName;
-            int isSchoolnamevalid = 1;
-        enterSchoolname: Console.WriteLine("Enter school name:");
-            schoolName = Console.ReadLine();
-            string regexForname = @"^[a-zA-Z ]+$";
-            Regex r = new Regex(regexForname);
-
-            if (!r.IsMatch(schoolName) || schoolName == "")
+            int userChoice = 0; bool flag = false;
+            while (flag != true)
             {
-                Console.WriteLine("Enter string as name");
-                goto enterSchoolname;
-                isSchoolnamevalid = 0;
-            }
-            else
-            {
-                school.schoolName = schoolName;
-            }
-        
-             
-        schoolId: Console.WriteLine("Enter School Id:");
-            try
-            {
-                school.schoolId = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine("Enter number as School Id");
-                goto schoolId;
-            }
-
-
-            Console.WriteLine("-----Welcome to " + school.schoolName.ToUpperInvariant() + " School with an id " + school.schoolId + "--------");
-
-            int userChoice = 0, flag = 0;
-            while (flag != 1)
-            {
-            enterUserchoice: Console.WriteLine("1.Add student\n2.Add marks of the student\n3.Show student progress card\n4.Exit\n5.Display");
+               
+            enterUserChoice: Console.WriteLine("1.Add School\n2.Add student\n3.Add marks of the student\n4.Show student progress card\n5.Display\n6.Exit");
 
                 try
                 {
@@ -57,32 +22,39 @@ namespace Schoolmanagement
                 catch (FormatException ex)
                 {
                     Console.WriteLine("Enter valid choice");
-                    goto enterUserchoice;
+                    goto enterUserChoice;
                 }
                 if (userChoice < 1 && userChoice > 4)
                 {
                     Console.WriteLine("Enter valid choice");
-                    goto enterUserchoice;
+                    goto enterUserChoice;
                 }
+
+
                 switch (userChoice)
                 {
                     case 1:
-                        Student s = new Student();
-                        Student.AddStudent();
+                       
+                        School.AddSchool();
                         break;
                     case 2:
+                        
+                        Student.AddStudent();
+                        break;
+                    case 3:
 
                         Student.UpdateMarks();
                         break;
-                    case 3:
-                        Student.ViewProgress();
-                        break;
                     case 4:
-                        flag = 1;
+                        Student.ViewProgress();
                         break;
                     case 5:
                         Student.Display();
                         break;
+                    case 6:
+                        flag = true;
+                        break;
+                   
                 }
             }
 

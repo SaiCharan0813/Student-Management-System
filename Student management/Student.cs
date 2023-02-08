@@ -1,381 +1,512 @@
 ﻿using Student_management;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.RegularExpressions;
+
 
 namespace Studentmanagement
 {
     public class Student
     {
-        public int StudentRollnumber;
+        public int StudentRollNumber;
+        public int IdOfSchool;
         public string Name;
         public float TotalMarks;
         public double Percentage;
-        public List<Marks>SubjectMarks=new List<Marks>();
-
+        public List<Marks> SubjectMarks = new List<Marks>();
         Marks telugu = new Marks();
         Marks hindi = new Marks();
         Marks english = new Marks();
         Marks maths = new Marks();
         Marks science = new Marks();
         Marks social = new Marks();
-
-
         public static void AddStudent()
         {
-            Student sc = new Student();
-        enterRollnumber: Console.WriteLine("Enter Student Roll Number:");
-            int studentRollnumber;
-
-            try
+            List<School> schools = SchoolManagement.GetAllSchools();
+            List<Student> students = School.GetAllStudents();
+            foreach (School school in schools)
             {
-                studentRollnumber = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("School id is: " + school.SchoolId + " School name is: "+school.SchoolName);
             }
-            catch (FormatException ex)
+            Student newStudent = new Student();
+            if (SchoolManagement.schools.Count > 0)
             {
-                Console.WriteLine("Enter valid roll number");
-                goto enterRollnumber;
-            }
-
-            foreach (var student in School.students)
-            {
-                if (student.StudentRollnumber == studentRollnumber)
+            enterSchoolIdNumber:
+                Console.WriteLine("Enter School id which you want to join:");
+                int schoolIdNumber;
+                try
                 {
-                    Console.WriteLine("Roll number already exist");
-                    goto enterRollnumber;
+                    schoolIdNumber = Convert.ToInt32(Console.ReadLine());
                 }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine("Enter valid School id number");
+                    goto enterSchoolIdNumber;
+                }
+                bool isSchoolExist = false;
+                int i;
+                for (i = 0; i < SchoolManagement.schools.Count; i++)
+                {
 
-            }
+                    if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
+                    {
+                        isSchoolExist = true;
+                        break;
+                    }
+                }
+                if (isSchoolExist == true)
+                {
+                    School schoolObject = SchoolManagement.GetSchoolById(schoolIdNumber);
+                enterRollNumber:
+                    Console.WriteLine("Enter Student Roll Number:");
+                    int studentRollNumber;
+                    try
+                    {
+                        studentRollNumber = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine("Enter valid roll number");
+                        goto enterRollNumber;
+                    }
 
-            string enterName;
-            int isName = 1;
-        enterStudentname: Console.WriteLine("Enter Student Name: ");
-            enterName = Console.ReadLine();
-            string nameRegex = @"^[a-zA-Z ]+$";
-            Regex r = new Regex(nameRegex);
+                    foreach (Student student in schoolObject.students)
+                    {
+                        if (student.StudentRollNumber == studentRollNumber)
+                        {
+                            Console.WriteLine("Roll number already exist");
+                            goto enterRollNumber;
+                        }
 
-            if (!r.IsMatch(enterName) || enterName == "")
-            {
-                Console.WriteLine("Enter string as name");
-                goto enterStudentname;
-                isName = 0;
+                    }
+                    string name;
+                    bool isNameValid = true;
+                enterStudentName: Console.WriteLine("Enter Student Name: ");
+                    name = Console.ReadLine();
+                    string nameRegex = @"^[a-zA-Z ]+$";
+                    Regex r = new Regex(nameRegex);
+
+                    if (!r.IsMatch(name) || name == "")
+                    {
+                        Console.WriteLine("Enter string as name");
+                        goto enterStudentName;
+                        isNameValid = false;
+                    }
+                    else
+                    {
+                        newStudent.Name = name;
+                        newStudent.StudentRollNumber = studentRollNumber;
+                        newStudent.IdOfSchool = schoolIdNumber;
+                    }
+                    schoolObject.students.Add(newStudent);
+                }
             }
             else
             {
-                sc.Name = enterName;
-                sc.StudentRollnumber = studentRollnumber;
+                Console.WriteLine("No school are there to join");
             }
-
-            School.students.Add(sc);
-           
-
         }
         public static void UpdateMarks()
         {
-            Student student= new Student();
-            int studentRollid;
-        enterRollid: Console.WriteLine("Enter Roll Number");
+            List<School> schools = SchoolManagement.GetAllSchools();
+            List<Student> students = School.GetAllStudents();
+
+            School school = new School();
+            if (SchoolManagement.schools.Count > 0)
+            {
+            enterSchoolIdNumber:
+
+
+                Console.WriteLine("Enter School id of the student :");
+                int schoolIdNumber;
+
+                try
+                {
+                    schoolIdNumber = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException ex)
+                {
+                    Console.WriteLine("Enter valid School id number");
+                    goto enterSchoolIdNumber;
+                }
+
+                bool isSchoolExist = false;
+                int i;
+                int size = SchoolManagement.schools.Count;
+                for (i = 0; i < size; i++)
+                {
+
+                    if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
+                    {
+                        isSchoolExist = true;
+                        break;
+                    }
+
+                }
+                if (isSchoolExist == true)
+                {
+                    School schoolObject = SchoolManagement.GetSchoolById(schoolIdNumber);
+                    Student student = new Student();
+                    int studentRollId;
+                enterRollId: Console.WriteLine("Enter Roll Number");
+
+                    try
+                    {
+                        studentRollId = Convert.ToInt32(Console.ReadLine());
+
+                    }
+                    catch (FormatException ex)
+                    {
+                        Console.WriteLine("Enter valid roll number");
+                        goto enterRollId;
+                    }
+                    Student newStudent = new Student();
+                    bool isStudentExist = false;
+                    size = school.students.Count;
+               
+                    foreach (Student schoolStudent in schoolObject.students)
+                    {
+                        if (schoolStudent.StudentRollNumber == studentRollId)
+                        {
+                            isStudentExist = true;
+                            break;
+                        }
+                       
+                    }
+                    if (isStudentExist == true)
+                    {
+                        newStudent = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                        string teluguMarks;
+                        bool isStudentMarks = false;
+                        string re = @"^[0-9]*$";
+                        Regex r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter Telugu marks:");
+
+                            teluguMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(teluguMarks) || teluguMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = true;
+                            }
+                            else
+                            {
+
+                                newStudent.telugu.SubjectName = StudentSubjects.Subjects.Telugu;
+                                newStudent.telugu.Score = Convert.ToInt32(teluguMarks);
+                                newStudent.SubjectMarks.Add(newStudent.telugu);
+
+                            }
+
+                            if (newStudent.telugu.Score < 0 || newStudent.telugu.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+
+                        }
+                        string hindiMarks;
+                        isStudentMarks = false;
+                        re = @"^[0-9]*$";
+                        r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter Hindi marks:");
+
+                            hindiMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(hindiMarks) || hindiMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = false;
+                            }
+                            else
+                            {
+
+                                newStudent.hindi.SubjectName = StudentSubjects.Subjects.Hindi;
+                                newStudent.hindi.Score = Convert.ToInt32(hindiMarks);
+                                newStudent.SubjectMarks.Add(newStudent.hindi);
+                            }
+                            if (newStudent.hindi.Score < 0 || newStudent.hindi.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+
+                        }
+                        string englishMarks;
+                        isStudentMarks = false;
+                        re = @"^[0-9]*$";
+                        r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter English marks:");
+
+                            englishMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(englishMarks) || englishMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = false;
+                            }
+                            else
+                            {
+
+                                newStudent.english.SubjectName = StudentSubjects.Subjects.English;
+                                newStudent.english.Score = Convert.ToInt32(englishMarks);
+                                newStudent.SubjectMarks.Add(newStudent.english);
+                            }
+                            if (newStudent.english.Score < 0 || newStudent.english.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+
+                        }
+                        string mathsMarks;
+                        isStudentMarks = false;
+                        re = @"^[0-9]*$";
+                        r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter Maths marks:");
+
+                            mathsMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(mathsMarks) || mathsMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = false;
+                            }
+                            else
+                            {
+
+                                newStudent.maths.SubjectName = StudentSubjects.Subjects.Maths;
+                                newStudent.maths.Score = Convert.ToInt32(mathsMarks);
+                                newStudent.SubjectMarks.Add(newStudent.maths);
+                            }
+                            if (newStudent.maths.Score < 0 || newStudent.maths.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+
+                        }
+                        string scienceMarks;
+                        isStudentMarks = false;
+                        re = @"^[0-9]*$";
+                        r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter Science marks:");
+
+                            scienceMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(scienceMarks) || scienceMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = false;
+                            }
+                            else
+                            {
+
+                                newStudent.science.SubjectName = StudentSubjects.Subjects.Science;
+                                newStudent.science.Score = Convert.ToInt32(scienceMarks);
+                                newStudent.SubjectMarks.Add(newStudent.science);
+                            }
+                            if (newStudent.science.Score < 0 || newStudent.science.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+
+                        }
+                        string socialMarks;
+                        isStudentMarks = false;
+                        re = @"^[0-9]*$";
+                        r = new Regex(re);
+                        while (isStudentMarks != true)
+                        {
+                            Console.WriteLine("Enter Social marks:");
+
+                            socialMarks = Console.ReadLine();
+                            isStudentMarks = true;
+                            if (!r.IsMatch(socialMarks) || socialMarks == "")
+                            {
+
+                                Console.WriteLine("Enter valid Marks");
+                                isStudentMarks = false;
+                            }
+                            else
+                            {
+
+                                newStudent.social.SubjectName = StudentSubjects.Subjects.Social;
+                                newStudent.social.Score = Convert.ToInt32(socialMarks);
+                                newStudent.SubjectMarks.Add(newStudent.social);
+                            }
+                            if (newStudent.social.Score < 0 || newStudent.social.Score > 100)
+                            {
+                                isStudentMarks = false;
+                                Console.WriteLine("Enter valid Marks");
+
+                            }
+                        }
+
+                        newStudent.TotalMarks = newStudent.telugu.Score + newStudent.hindi.Score + newStudent.english.Score + newStudent.maths.Score + newStudent.science.Score + newStudent.social.Score;
+                        newStudent.Percentage = Math.Round((double)newStudent.TotalMarks / 6, 2);
+
+                        
+                        var studentToUpdate = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                        studentToUpdate = newStudent;
+                    }
+                    else
+                    {
+                        Console.WriteLine("No student with that roll number");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No school present with that ID");
+                }
+
+
+
+            }
+        }
+        public static void ViewProgress()
+        {
+            List<School> schools = SchoolManagement.GetAllSchools();
+            List<Student> students = School.GetAllStudents();
+            foreach (School school in schools)
+            {
+                Console.WriteLine("School is: " + school.SchoolId);
+            }
+        enterSchoolIdNumber:
+
+
+            Console.WriteLine("Enter School id of the student :");
+            int schoolIdNumber;
 
             try
             {
-                studentRollid = Convert.ToInt32(Console.ReadLine());
-
+                schoolIdNumber = Convert.ToInt32(Console.ReadLine());
             }
             catch (FormatException ex)
             {
-                Console.WriteLine("Enter valid roll number");
-                goto enterRollid;
+                Console.WriteLine("Enter valid School id number");
+                goto enterSchoolIdNumber;
             }
-            Student sc = new Student();
-            int isStudentexist = 0;
+
+            bool isSchoolExist = false;
             int i;
-            int size = School.students.Count;
+            int size = SchoolManagement.schools.Count;
             for (i = 0; i < size; i++)
             {
 
-                if (School.students[i].StudentRollnumber == studentRollid)
+                if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
                 {
-                    isStudentexist = 1;
+                    isSchoolExist = true;
                     break;
                 }
+
             }
-            if (isStudentexist == 1)
+            if (isSchoolExist == true)
             {
-                sc = School.students[i];
-                string teluguMarks;
-                int isStudentmarks = 0;
-                string re = @"^[0-9]*$";
-                Regex r = new Regex(re);
-                while (isStudentmarks != 1)
+                School schoolObject = SchoolManagement.GetSchoolById(schoolIdNumber);
+                Student student = new Student();
+                int studentRollId;
+            enterRollId: Console.WriteLine("Enter Roll Number");
+
+                try
                 {
-                    Console.WriteLine("Enter Telugu marks:");
-
-                    teluguMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(teluguMarks) || teluguMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.telugu.SubjectName = StudentSubjects.Subjects.telugu;
-                        sc.telugu.Score = Convert.ToInt32(teluguMarks);
-                        sc.SubjectMarks.Add(sc.telugu);
-                       
-                    }
-
-                    if (sc.telugu.Score < 0 || sc.telugu.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
+                    studentRollId = Convert.ToInt32(Console.ReadLine());
 
                 }
-                string hindiMarks;
-                isStudentmarks = 0;
-                re = @"^[0-9]*$";
-                r = new Regex(re);
-                while (isStudentmarks != 1)
+                catch (FormatException ex)
                 {
-                    Console.WriteLine("Enter Hindi marks:");
-
-                    hindiMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(hindiMarks) || hindiMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.hindi.SubjectName = StudentSubjects.Subjects.hindi;
-                        sc.hindi.Score = Convert.ToInt32(hindiMarks);
-                        sc.SubjectMarks.Add(sc.hindi);
-                    }
-                    if (sc.hindi.Score < 0 || sc.hindi.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
-
-                }
-                string englishMarks;
-                isStudentmarks = 0;
-                re = @"^[0-9]*$";
-                r = new Regex(re);
-                while (isStudentmarks != 1)
-                {
-                    Console.WriteLine("Enter English marks:");
-
-                    englishMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(englishMarks) || englishMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.english.SubjectName = StudentSubjects.Subjects.english;
-                        sc.english.Score = Convert.ToInt32(englishMarks);
-                        sc.SubjectMarks.Add(sc.english);
-                    }
-                    if (sc.english.Score < 0 || sc.english.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
-
-                }
-                string mathsMarks;
-                isStudentmarks = 0;
-                re = @"^[0-9]*$";
-                r = new Regex(re);
-                while (isStudentmarks != 1)
-                {
-                    Console.WriteLine("Enter Maths marks:");
-
-                    mathsMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(mathsMarks) || mathsMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.maths.SubjectName = StudentSubjects.Subjects.maths;
-                        sc.maths.Score = Convert.ToInt32(mathsMarks);
-                        sc.SubjectMarks.Add(sc.maths);
-                    }
-                    if (sc.maths.Score < 0 || sc.maths.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
-
-                }
-                string scienceMarks;
-                isStudentmarks = 0;
-                re = @"^[0-9]*$";
-                r = new Regex(re);
-                while (isStudentmarks != 1)
-                {
-                    Console.WriteLine("Enter Science marks:");
-
-                    scienceMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(scienceMarks) || scienceMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.science.SubjectName = StudentSubjects.Subjects.science;
-                        sc.science.Score = Convert.ToInt32(scienceMarks);
-                        sc.SubjectMarks.Add(sc.science);
-                    }
-                    if (sc.science.Score < 0 || sc.science.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
-
-                }
-                string socialMarks;
-                isStudentmarks = 0;
-                re = @"^[0-9]*$";
-                r = new Regex(re);
-                while (isStudentmarks != 1)
-                {
-                    Console.WriteLine("Enter Social marks:");
-
-                    socialMarks = Console.ReadLine();
-                    isStudentmarks = 1;
-                    if (!r.IsMatch(socialMarks) || socialMarks == "")
-                    {
-
-                        Console.WriteLine("Enter valid Marks");
-                        isStudentmarks = 0;
-                    }
-                    else
-                    {
-
-                        sc.social.SubjectName = StudentSubjects.Subjects.social;
-                        sc.social.Score = Convert.ToInt32(socialMarks);
-                        sc.SubjectMarks.Add(sc.social);
-                    }
-                    if (sc.social.Score < 0 || sc.social.Score > 100)
-                    {
-                        isStudentmarks = 0;
-                        Console.WriteLine("Enter valid Marks");
-
-                    }
+                    Console.WriteLine("Enter valid roll number");
+                    goto enterRollId;
                 }
 
-                sc.TotalMarks = sc.telugu.Score + sc.hindi.Score + sc.english.Score + sc.maths.Score + sc.science.Score + sc.social.Score;
-                sc.Percentage = Math.Round((double)sc.TotalMarks / 6, 2);
+                bool isStudentExist = false;
                 
-                School.students[i] = sc;
-            }
-            else
-            {
-                Console.WriteLine("No student with that roll number");
+                foreach (Student schoolStudent in schoolObject.students)
+                {
+                    Console.WriteLine(schoolStudent.StudentRollNumber);
+                    if (schoolStudent.StudentRollNumber == studentRollId)
+                    {
+                        isStudentExist = true;
+                        break;
+                    }
+                  
+                }
+                if (isStudentExist == true)
+                {
+                    Student studentObject = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                    Console.WriteLine("Student Telugu marks:" + studentObject.telugu.Score);
+
+                    Console.WriteLine("Student Hindi marks:" + studentObject.hindi.Score);
+
+                    Console.WriteLine("Student English marks:" + studentObject.english.Score);
+
+                    Console.WriteLine("Student Maths marks:" + studentObject.maths.Score);
+
+                    Console.WriteLine("Student Science marks:" + studentObject.science.Score);
+
+                    Console.WriteLine("Student Social marks:" + studentObject.social.Score);
+
+                    Console.WriteLine("Student Total marks:" + studentObject.TotalMarks);
+
+                    Console.WriteLine("Student Percentage marks:" + studentObject.Percentage);
+
+                }
             }
         }
 
-        public static void ViewProgress()
-        {
-
-
-            int studentRoll;
-        enterRollnumber: Console.WriteLine("Enter Roll Number");
-
-            try
-            {
-                studentRoll = Convert.ToInt32(Console.ReadLine());
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine("Enter valid RollNumber");
-                goto enterRollnumber;
-            }
-            int isRoll = 0;
-            foreach (var student in School.students)
-            {
-                if (student.StudentRollnumber == studentRoll)
-                {
-
-                    isRoll = 1;
-                    break;
-
-                }
-
-            }
-            if (isRoll == 0)
-            {
-                Console.WriteLine("roll number dosen't exist");
-            }
-            int isId = 0;
-            int j;
-            for (j = 0; j < School.students.Count; j++)
-            {
-                if (School.students[j].StudentRollnumber == studentRoll)
-                {
-                    isId = 1;
-                    break;
-                }
-            }
-            if (isId == 1)
-            {
-                Student sc = School.students[j];
-                Console.WriteLine("Student Telugu marks:" + sc.telugu.Score);
-
-                Console.WriteLine("Student Hindi marks:" + sc.hindi.Score);
-
-                Console.WriteLine("Student English marks:" + sc.english.Score);
-
-                Console.WriteLine("Student Maths marks:" + sc.maths.Score);
-
-                Console.WriteLine("Student Science marks:" + sc.science.Score);
-
-                Console.WriteLine("Student Social marks:" + sc.social.Score);
-
-                Console.WriteLine("Student Total marks:" + sc.TotalMarks);
-
-                Console.WriteLine("Student Percentage marks:" + sc.Percentage);
-
-            }
-
-        }
         public static void Display()
         {
-            Console.WriteLine("Total Students");
-            foreach (var student in School.students)
+            List<School> schools = SchoolManagement.GetAllSchools();
+            List<Student> students = School.GetAllStudents();
+ 
+            bool isSchoolExist = false;
+            if(schools.Count > 0)
             {
-                Console.WriteLine("Student with Rollnumber: " + student.StudentRollnumber + " \nName:" + student.Name);
+                isSchoolExist=true;
             }
+            if (isSchoolExist == true)
+            {
+                foreach (School school in schools)
+                {
+                    if (school.students.Count > 0)
+                    {
+                        Console.WriteLine("School id is: " + school.SchoolId + " School name is: " + school.SchoolName);
+                        for (int j = 0; j < school.students.Count; j++)
+                        {
+                            Console.WriteLine("Student name is: " + school.students[j].Name + " Student Roll number is: " + school.students[j].StudentRollNumber);
+                        }
+                    }
+                }
+            }
+
         }
     }
-
 }
+
+
+
 
 

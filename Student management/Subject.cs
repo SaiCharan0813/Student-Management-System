@@ -10,7 +10,7 @@ namespace Student_management
     {
         public enum Subjects
         {
-            telugu, hindi, english, maths, science, social
+            Telugu, Hindi, English, Maths, Science, Social
         }
     }
 
