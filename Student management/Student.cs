@@ -30,7 +30,7 @@ namespace Studentmanagement
             Console.WriteLine("student name is: "+student.Name);
             }
                 Student newStudent = new Student();
-            if (SchoolManagement.schools.Count > 0)
+            if (SchoolManagement.Schools.Count > 0)
             {
             enterSchoolIdNumber:
                 Console.WriteLine("Enter School id which you want to join:");
@@ -45,10 +45,10 @@ namespace Studentmanagement
                     goto enterSchoolIdNumber;
                 }
                 bool isSchoolExist = false;
-                for (int i = 0; i < SchoolManagement.schools.Count; i++)
+                for (int i = 0; i < SchoolManagement.Schools.Count; i++)
                 {
 
-                    if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
+                    if (SchoolManagement.Schools[i].SchoolId == schoolIdNumber)
                     {
                         isSchoolExist = true;
                         break;
@@ -110,7 +110,7 @@ namespace Studentmanagement
         {
             List<School> schools = SchoolManagement.GetAllSchools();
             School school = new School();
-            if (SchoolManagement.schools.Count > 0)
+            if (SchoolManagement.Schools.Count > 0)
             {
             enterSchoolIdNumber:
 
@@ -130,11 +130,11 @@ namespace Studentmanagement
 
                 bool isSchoolExist = false;
                  
-                int size = SchoolManagement.schools.Count;
+                int size = SchoolManagement.Schools.Count;
                 for (int i = 0; i < size; i++)
                 {
 
-                    if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
+                    if (SchoolManagement.Schools[i].SchoolId == schoolIdNumber)
                     {
                         isSchoolExist = true;
                         break;
@@ -407,11 +407,11 @@ namespace Studentmanagement
             }
 
             bool isSchoolExist = false;
-            int size = SchoolManagement.schools.Count;
+            int size = SchoolManagement.Schools.Count;
             for (int i = 0; i < size; i++)
             {
 
-                if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
+                if (SchoolManagement.Schools[i].SchoolId == schoolIdNumber)
                 {
                     isSchoolExist = true;
                     break;

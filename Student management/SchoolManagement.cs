@@ -9,21 +9,21 @@ namespace Student_management
 {
     public class SchoolManagement
     {
-        public static List<School> schools = new List<School>();
+        public static List<School> Schools = new List<School>();
         public static School GetSchoolById(int schoolId)
         {
-            return schools.Find(x => x.SchoolId == schoolId);
+            return Schools.Find(x => x.SchoolId == schoolId);
         }
         public static void DisplayAllSchools()
         {
-            foreach (var school in SchoolManagement.schools)
+            foreach (var school in SchoolManagement.Schools)
             {
                 Console.WriteLine("The School id is: " + school.SchoolId+" The School name is: "+school.SchoolName);
             }
         }
         public static List<School> GetAllSchools()
         {
-            return schools;
+            return Schools;
         }
 
     }
