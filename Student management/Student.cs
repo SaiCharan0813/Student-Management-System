@@ -5,16 +5,15 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.RegularExpressions;
 
-
 namespace Studentmanagement
 {
     public class Student
     {
-        public int StudentRollNumber;
-        public int IdOfSchool;
-        public string Name;
-        public float TotalMarks;
-        public double Percentage;
+        public int StudentRollNumber { get; set; }
+        public int IdOfSchool { get; set; }
+        public string Name { get; set; }
+        public float TotalMarks { get; set; }
+        public double Percentage { get; set; }
         public List<Marks> SubjectMarks = new List<Marks>();
         Marks telugu = new Marks();
         Marks hindi = new Marks();
@@ -26,11 +25,11 @@ namespace Studentmanagement
         {
             List<School> schools = SchoolManagement.GetAllSchools();
             List<Student> students = School.GetAllStudents();
-            foreach (School school in schools)
+           foreach(Student student in students)
             {
-                Console.WriteLine("School id is: " + school.SchoolId + " School name is: "+school.SchoolName);
+            Console.WriteLine("student name is: "+student.Name);
             }
-            Student newStudent = new Student();
+                Student newStudent = new Student();
             if (SchoolManagement.schools.Count > 0)
             {
             enterSchoolIdNumber:
@@ -46,8 +45,7 @@ namespace Studentmanagement
                     goto enterSchoolIdNumber;
                 }
                 bool isSchoolExist = false;
-                int i;
-                for (i = 0; i < SchoolManagement.schools.Count; i++)
+                for (int i = 0; i < SchoolManagement.schools.Count; i++)
                 {
 
                     if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
@@ -72,7 +70,7 @@ namespace Studentmanagement
                         goto enterRollNumber;
                     }
 
-                    foreach (Student student in schoolObject.students)
+                    foreach (Student student in schoolObject.Students)
                     {
                         if (student.StudentRollNumber == studentRollNumber)
                         {
@@ -100,7 +98,7 @@ namespace Studentmanagement
                         newStudent.StudentRollNumber = studentRollNumber;
                         newStudent.IdOfSchool = schoolIdNumber;
                     }
-                    schoolObject.students.Add(newStudent);
+                    schoolObject.Students.Add(newStudent);
                 }
             }
             else
@@ -111,8 +109,6 @@ namespace Studentmanagement
         public static void UpdateMarks()
         {
             List<School> schools = SchoolManagement.GetAllSchools();
-            List<Student> students = School.GetAllStudents();
-
             School school = new School();
             if (SchoolManagement.schools.Count > 0)
             {
@@ -133,9 +129,9 @@ namespace Studentmanagement
                 }
 
                 bool isSchoolExist = false;
-                int i;
+                 
                 int size = SchoolManagement.schools.Count;
-                for (i = 0; i < size; i++)
+                for (int i = 0; i < size; i++)
                 {
 
                     if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
@@ -164,9 +160,9 @@ namespace Studentmanagement
                     }
                     Student newStudent = new Student();
                     bool isStudentExist = false;
-                    size = school.students.Count;
+                    size = school.Students.Count;
                
-                    foreach (Student schoolStudent in schoolObject.students)
+                    foreach (Student schoolStudent in schoolObject.Students)
                     {
                         if (schoolStudent.StudentRollNumber == studentRollId)
                         {
@@ -177,22 +173,22 @@ namespace Studentmanagement
                     }
                     if (isStudentExist == true)
                     {
-                        newStudent = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                        newStudent = schoolObject.Students.Find(x => x.StudentRollNumber == studentRollId);
                         string teluguMarks;
-                        bool isStudentMarks = false;
+                        bool isStudentMarksValid = false;
                         string re = @"^[0-9]*$";
                         Regex r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter Telugu marks:");
 
                             teluguMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(teluguMarks) || teluguMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = true;
+                                isStudentMarksValid = true;
                             }
                             else
                             {
@@ -205,27 +201,27 @@ namespace Studentmanagement
 
                             if (newStudent.telugu.Score < 0 || newStudent.telugu.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
 
                         }
                         string hindiMarks;
-                        isStudentMarks = false;
+                        isStudentMarksValid = false;
                         re = @"^[0-9]*$";
                         r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter Hindi marks:");
 
                             hindiMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(hindiMarks) || hindiMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                             }
                             else
                             {
@@ -236,27 +232,27 @@ namespace Studentmanagement
                             }
                             if (newStudent.hindi.Score < 0 || newStudent.hindi.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
 
                         }
                         string englishMarks;
-                        isStudentMarks = false;
+                        isStudentMarksValid = false;
                         re = @"^[0-9]*$";
                         r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter English marks:");
 
                             englishMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(englishMarks) || englishMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                             }
                             else
                             {
@@ -267,27 +263,27 @@ namespace Studentmanagement
                             }
                             if (newStudent.english.Score < 0 || newStudent.english.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
 
                         }
                         string mathsMarks;
-                        isStudentMarks = false;
+                        isStudentMarksValid = false;
                         re = @"^[0-9]*$";
                         r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter Maths marks:");
 
                             mathsMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(mathsMarks) || mathsMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                             }
                             else
                             {
@@ -298,27 +294,27 @@ namespace Studentmanagement
                             }
                             if (newStudent.maths.Score < 0 || newStudent.maths.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
 
                         }
                         string scienceMarks;
-                        isStudentMarks = false;
+                        isStudentMarksValid = false;
                         re = @"^[0-9]*$";
                         r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter Science marks:");
 
                             scienceMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(scienceMarks) || scienceMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                             }
                             else
                             {
@@ -329,27 +325,27 @@ namespace Studentmanagement
                             }
                             if (newStudent.science.Score < 0 || newStudent.science.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
 
                         }
                         string socialMarks;
-                        isStudentMarks = false;
+                        isStudentMarksValid = false;
                         re = @"^[0-9]*$";
                         r = new Regex(re);
-                        while (isStudentMarks != true)
+                        while (isStudentMarksValid != true)
                         {
                             Console.WriteLine("Enter Social marks:");
 
                             socialMarks = Console.ReadLine();
-                            isStudentMarks = true;
+                            isStudentMarksValid = true;
                             if (!r.IsMatch(socialMarks) || socialMarks == "")
                             {
 
                                 Console.WriteLine("Enter valid Marks");
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                             }
                             else
                             {
@@ -360,7 +356,7 @@ namespace Studentmanagement
                             }
                             if (newStudent.social.Score < 0 || newStudent.social.Score > 100)
                             {
-                                isStudentMarks = false;
+                                isStudentMarksValid = false;
                                 Console.WriteLine("Enter valid Marks");
 
                             }
@@ -370,7 +366,7 @@ namespace Studentmanagement
                         newStudent.Percentage = Math.Round((double)newStudent.TotalMarks / 6, 2);
 
                         
-                        var studentToUpdate = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                        var studentToUpdate = schoolObject.Students.Find(x => x.StudentRollNumber == studentRollId);
                         studentToUpdate = newStudent;
                     }
                     else
@@ -390,7 +386,6 @@ namespace Studentmanagement
         public static void ViewProgress()
         {
             List<School> schools = SchoolManagement.GetAllSchools();
-            List<Student> students = School.GetAllStudents();
             foreach (School school in schools)
             {
                 Console.WriteLine("School is: " + school.SchoolId);
@@ -412,9 +407,8 @@ namespace Studentmanagement
             }
 
             bool isSchoolExist = false;
-            int i;
             int size = SchoolManagement.schools.Count;
-            for (i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
 
                 if (SchoolManagement.schools[i].SchoolId == schoolIdNumber)
@@ -444,7 +438,7 @@ namespace Studentmanagement
 
                 bool isStudentExist = false;
                 
-                foreach (Student schoolStudent in schoolObject.students)
+                foreach (Student schoolStudent in schoolObject.Students)
                 {
                     Console.WriteLine(schoolStudent.StudentRollNumber);
                     if (schoolStudent.StudentRollNumber == studentRollId)
@@ -456,7 +450,7 @@ namespace Studentmanagement
                 }
                 if (isStudentExist == true)
                 {
-                    Student studentObject = schoolObject.students.Find(x => x.StudentRollNumber == studentRollId);
+                    Student studentObject = schoolObject.Students.Find(x => x.StudentRollNumber == studentRollId);
                     Console.WriteLine("Student Telugu marks:" + studentObject.telugu.Score);
 
                     Console.WriteLine("Student Hindi marks:" + studentObject.hindi.Score);
@@ -480,7 +474,7 @@ namespace Studentmanagement
         public static void Display()
         {
             List<School> schools = SchoolManagement.GetAllSchools();
-            List<Student> students = School.GetAllStudents();
+            
  
             bool isSchoolExist = false;
             if(schools.Count > 0)
@@ -491,12 +485,12 @@ namespace Studentmanagement
             {
                 foreach (School school in schools)
                 {
-                    if (school.students.Count > 0)
+                    if (school.Students.Count > 0)
                     {
                         Console.WriteLine("School id is: " + school.SchoolId + " School name is: " + school.SchoolName);
-                        for (int j = 0; j < school.students.Count; j++)
+                        for (int j = 0; j < school.Students.Count; j++)
                         {
-                            Console.WriteLine("Student name is: " + school.students[j].Name + " Student Roll number is: " + school.students[j].StudentRollNumber);
+                            Console.WriteLine("Student name is: " + school.Students[j].Name + " Student Roll number is: " + school.Students[j].StudentRollNumber);
                         }
                     }
                 }

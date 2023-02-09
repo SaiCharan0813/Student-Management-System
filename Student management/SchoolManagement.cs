@@ -21,9 +21,10 @@ namespace Student_management
                 Console.WriteLine("The School id is: " + school.SchoolId+" The School name is: "+school.SchoolName);
             }
         }
-        public static ref List<School> GetAllSchools()
+        public static List<School> GetAllSchools()
         {
-            return ref schools;
+            return schools;
         }
+
     }
 }

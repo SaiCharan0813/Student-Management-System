@@ -12,14 +12,26 @@ namespace Student_management
     public class School
     {
         
-        public int SchoolId;
+        public int SchoolId { get; set; }
         public string SchoolName;
-        public  List<Student> students = new List<Student>();
+        public  List<Student> Students = new List<Student>();
 
-        public static ref List<Student> GetAllStudents()
+        public static List<Student> GetAllStudents()
         {
-            School school = new School();
-            return ref school.students;
+            List<School> schools = SchoolManagement.GetAllSchools();
+            List<Student> students = new List<Student>();   
+            foreach (School studentSchool in schools)
+            {
+                if (studentSchool.Students.Count > 0)
+                {
+
+                    for (int j = 0; j < studentSchool.Students.Count; j++)
+                    {
+                        students.Add(studentSchool.Students[j]);
+                    }
+                }
+            }
+            return students;
         }
         public static void AddSchool()
         {

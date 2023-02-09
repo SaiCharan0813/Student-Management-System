@@ -9,8 +9,8 @@ namespace Schoolmanagement
     {
         public static void Main(string[] args)
         {
-            int userChoice = 0; bool flag = false;
-            while (flag != true)
+            int userChoice = 0; bool isOption = false;
+            while (isOption != true)
             {
                
             enterUserChoice: Console.WriteLine("1.Add School\n2.Add student\n3.Add marks of the student\n4.Show student progress card\n5.Display\n6.Exit");
@@ -52,7 +52,7 @@ namespace Schoolmanagement
                         Student.Display();
                         break;
                     case 6:
-                        flag = true;
+                        isOption = true;
                         break;
                    
                 }
